@@ -112,7 +112,7 @@
     function logout() {
       localStorage.removeItem('session');
       alert('Sesión cerrada. Volviendo al inicio de sesión.');
-      window.location.href = 'login.html';
+      window.location.href = 'Index.html';
     }
   </script>
 
@@ -121,15 +121,9 @@
   const sessionUser = localStorage.getItem('session');
   if (!sessionUser) {
     alert('Por favor, inicia sesión primero.');
-    window.location.href = 'login.html';  // Redirigir al login si no hay sesión
+    window.location.href = 'Index.html';  // Redirigir al login si no hay sesión
   } else {
     document.getElementById('welcomeMessage').textContent = `Bienvenido, ${sessionUser}`;
-  }
-
-  function logout() {
-    localStorage.removeItem('session');
-    alert('Sesión cerrada.');
-    window.location.href = 'login.html';
   }
 </script>
 
