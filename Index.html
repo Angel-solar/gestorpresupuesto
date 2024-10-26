@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor de Presupuesto</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Gestor de Presupuesto</h1>
+    <label onclick="logout()" class="logout-label">Cerrar Sesión</label>
+  </header>
+  <div style="text-align: right; margin-top: 10px;">
+    <select id="exportFormat" style="margin-right: 5px;">
+      <option value="csv">CSV</option>
+      <option value="pdf">PDF</option>
+    </select>
+    <button id="exportButton">Exportar</button>
+  </div>  
+  <main>
+    <!-- Sección de Agregar Transacción -->
+    <section id="add-transaction">
+      <h2>Agregar Transacción</h2>
+      <form id="transaction-form">
+        <label for="description">Descripción:</label>
+        <input type="text" id="description" name="description" required>
+        <label for="date">Fecha:</label>
+        <input type="date" id="date" name="date" required>
+        <label for="amount">Cantidad:</label>
+        <input type="number" id="amount" name="amount" required>
+        <label for="category">Categoría:</label>
+        <select id="categoryDropdown">
+          <option value="Pagos">Pagos</option>
+          <option value="Salud">Salud</option>
+          <option value="Regalo">Regalo</option>
+        </select>
+        <button type="button" onclick="addTransaction()">Agregar</button>
+        <button type="button" id="toggleTypeButton" onclick="toggleTransactionType()">Ingresos</button>
+      </form>
+    </section>
+    
+    <!-- Sección de Gestión de Categorías -->
+    <section id="category-management">
+        <h2>Gestión de Categorías</h2>
+        <label>Nueva Categoría: <input type="text" id="newCategory"></label>
+        <button onclick="addCategory()">Agregar Categoría</button><br>
+        <label>Eliminar Categoría:
+            <select id="removeCategoryDropdown"></select>
+          </label>
+          <button onclick="confirmRemoveCategory()">Eliminar Categoría</button>
+    </section>
+
+    <!-- Sección de Filtro por Fecha -->
+<section id="date-filter">
+    <h2>Filtrar por Período</h2>
+    <form id="filter-form">
+      <label for="start-date">Desde:</label>
+      <input type="date" id="start-date" required>
+      <label for="end-date">Hasta:</label>
+      <input type="date" id="end-date" required>
+      <button type="button" onclick="filterTransactions()">Filtrar</button>
+    </form>
+  </section>
+  
+  <!-- Sección de Resumen con Scroll -->
+  <section id="summary">
+    <h2>Historial de Transacciones</h2>
+    <div id="transaction-list-container">
+      <ul id="transaction-list"></ul>
+    </div>
+    <div id="totals">
+      <p>Total de Ingresos: $<span id="total-income">0</span></p>
+      <p>Total de Gastos: $<span id="total-expense">0</span></p>
+      <p id="limit-display" style="display: none;">Límite: $<span id="remaining-budget">0.00</span></p>
+      <p>Presupuesto en el Historial: $<span id="budget-history">0.00</span></p>
+      
+      <!-- Mostrar límites por categoría -->
+      <div id="category-limits"></div>
+    </div>
+  </section>
+  
+<!-- Sección de Presupuesto por Categoría -->
+<section id="budget-section">
+    <h2>Establecer limite de Presupuesto</h2>
+    <form id="budget-form">
+      <label for="categoryDropdownBudget">Categoría:</label>
+      <select id="categoryDropdownBudget"></select>
+  
+      <label for="budgetAmount">limite:</label>
+      <input type="number" id="budgetAmount" placeholder="Monto del presupuesto" required>
+  
+      <button type="button" onclick="setBudget()">Establecer limite</button>
+    </form>
+  </section>  
+  
+
+    <!-- Sección de Gráfico de Ingresos -->
+    <section id="chart-section">
+      <div class="chart-container">
+        <canvas id="incomeChart"></canvas>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2024 Equipo Umizoomi</p>
+  </footer>
+  <script src="code.js"></script>
+  <script>
+    function logout() {
+      localStorage.removeItem('session');
+      alert('Sesión cerrada. Volviendo al inicio de sesión.');
+      window.location.href = 'login.html';
+    }
+  </script>
+
+<script>
+  // Verificar si hay un usuario en sesión
+  const sessionUser = localStorage.getItem('session');
+  if (!sessionUser) {
+    alert('Por favor, inicia sesión primero.');
+    window.location.href = 'login.html';  // Redirigir al login si no hay sesión
+  } else {
+    document.getElementById('welcomeMessage').textContent = `Bienvenido, ${sessionUser}`;
+  }
+
+  function logout() {
+    localStorage.removeItem('session');
+    alert('Sesión cerrada.');
+    window.location.href = 'login.html';
+  }
+</script>
+
+</body>
+</html>
